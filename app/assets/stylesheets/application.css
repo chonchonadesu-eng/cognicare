@@ -1,0 +1,80 @@
+/*
+ *= require_tree .
+ *= require_self
+ */
+
+/* アプリ全体の背景 */
+body {
+  background: linear-gradient(160deg, #0a0e1a 0%, #0d1321 40%, #111827 100%);
+}
+
+/* パソコンでもスマホでも中央に収める設定 */
+.cognicare-calendar-view, 
+.dementia-checker-container {
+  max-width: 480px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+/* ==========================================================================
+   すべてのボタンに共通のベースとホバー効果
+   ========================================================================== */
+.cognicare-btn {
+  background-color: #1e293b;
+  color: #e2e8f0;
+  border: 1px solid #475569;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 13px;
+  text-decoration: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease; /* ← これが「スッと変わるアニメーション」の魔法です */
+}
+
+/* マウスを乗せたとき（全ボタン共通で少し明るく色が変わる） */
+.cognicare-btn:hover {
+  background-color: #334155;
+  border-color: #64748b;
+  transform: translateY(-1px); /* ← わずかに浮き上がるおまけ効果（お好みで！） */
+}
+
+/* プライマリ（保存する・行動チェックなど重要）の青いボタン用 */
+.cognicare-btn-primary {
+  background-color: #1d4ed8 !important;
+  border-color: #2563eb !important;
+  color: #ffffff !important;
+}
+.cognicare-btn-primary:hover {
+  background-color: #2563eb !important;
+}
+
+/* カード内のコンパクトなボタン用（ホバー対応版） */
+.cognicare-small-btn {
+  background-color: #334155;
+  color: #60a5fa;
+  border: 1px solid #475569;
+  padding: 4px 8px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 11px;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+  display: inline-block;
+}
+.cognicare-small-btn:hover {
+  background-color: #475569; /* マウスを乗せたら少し明るいグレーに */
+}
+
+/* 「行動チェックを行う」用の青いバージョン */
+.cognicare-small-btn-primary {
+  background-color: #1d4ed8;
+  color: #ffffff;
+  border: none;
+}
+.cognicare-small-btn-primary:hover {
+  background-color: #2563eb; /* マウスを乗せたら少し明るい青に */
+}

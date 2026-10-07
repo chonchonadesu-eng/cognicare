@@ -1,0 +1,308 @@
+<% content_for :head do %>
+  <meta name="turbo-cache-control" content="no-cache">
+<% end %>
+
+<div class="cognicare-container" style="max-width: 900px; margin: 0 auto; padding: 15px; font-family: sans-serif; color: #e2e8f0;">
+
+  <%# --- 1. ヘッダーエリア --- %>
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #334155; padding-bottom: 15px; flex-wrap: wrap; gap: 15px;">
+    <div>
+      <h1 style="margin: 0; font-size: 20px; color: #ffffff; font-weight: bold;">
+        <%= current_user.patient_name %>の記録管理
+      </h1>
+    </div>
+    
+    <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+      <%= link_to edit_user_registration_path, class: "cognicare-btn" do %>
+        ⚙️ 設定
+      <% end %>
+
+      <button onclick="window.print()" class="cognicare-btn">
+        🖨️ 印刷・PDF
+      </button>
+    </div>
+  </div>
+
+  <%# --- 2. 期間切り替えナビゲーション --- %>
+  <% 
+    prev_anchor = @current_anchor - 7.days
+    next_anchor = @current_anchor + 7.days
+    min_limit_date = 31.days.ago.to_date
+    can_go_prev = (@current_anchor - 6.days) > min_limit_date
+  %>
+
+  <div style="display: flex; justify-content: space-between; align-items: center; background: #111b38; border: 1px solid #334155; padding: 10px 16px; border-radius: 8px; margin-bottom: 15px;">
+    <% if can_go_prev %>
+      <%= link_to "◀︎ 1週間前", care_subject_check_records_path(@care_subject, anchor_date: prev_anchor), style: "color: #60a5fa; text-decoration: none; font-weight: bold; font-size: 13px;" %>
+    <% else %>
+      <span style="color: #475569; font-size: 13px;">◀︎ 過去の記録なし</span>
+    <% end %>
+
+    <span style="color: #ffffff; font-weight: bold; font-size: 14px;">
+      <%= (@current_anchor - 6.days).strftime("%Y年%m月%d日") %> 〜 <%= @current_anchor.strftime("%Y年%m月%d日") %>
+    </span>
+
+    <% if @current_anchor < Date.today %>
+      <%= link_to "1週間後 ▶︎", care_subject_check_records_path(@care_subject, anchor_date: next_anchor), style: "color: #60a5fa; text-decoration: none; font-weight: bold; font-size: 13px;" %>
+    <% else %>
+      <span style="color: #475569; font-size: 13px;">1週間後 ▶︎</span>
+    <% end %>
+  </div>
+
+  <%# --- 3. 生活記録・メモ一覧 --- %>
+  <div style="display: flex; flex-direction: column; gap: 15px;">
+    <h2 style="font-size: 16px; color: #94a3b8; margin: 0 0 5px 0;">📅 生活記録・メモ</h2>
+
+    <% 
+  symptom_labels = {
+    'm1' => '同じことを何度も繰り返し話す・聞く',
+    'm2' => '体験したこと自体をまるごと忘れる',
+    'm3' => '今日の日付・曜日・年がわからなくなった',
+    'm4' => '自分がどこにいるかわからなくなる',
+    'm5' => '昔のことはよく覚えているが、最近のことを忘れやすい',
+    'm6' => '物の名前が出てこなくなった（言葉が出にくい）',
+    'b1' => '同じ行動を毎日決まったルーティンで繰り返す',
+    'b2' => '目的もなくうろうろ歩き回る（徘徊）',
+    'b3' => '火の消し忘れや水の出しっぱなしなど、日常的なミスが増えた',
+    'b4' => '財布・鍵などをどこに置いたかわからなくなる頻度が増えた',
+    'b5' => '料理・家事など、以前できていたことができなくなった',
+    'b6' => '食べ物でないものを口に入れる、または過食になった',
+    'e1' => '以前と比べて無気力・無関心になった（アパシー）',
+    'e2' => '突然怒り出す・感情のコントロールが難しくなった',
+    'e3' => '以前は温和だったのに、粗暴な言動が見られるようになった',
+    'e4' => 'うつ状態・気分の落ち込みが目立つ',
+    'e5' => '「盗まれた」などの疑い・妄想がある',
+    'e6' => '自分が認知症であることを強く否定する',
+    'p1' => '実際にはいない人・動物などが見える（幻視）',
+    'p2' => '睡眠中に大声を出したり、手足を激しく動かしたりする',
+    'p3' => '体が硬い・動きがゆっくりになった（パーキンソン症状）',
+    'p4' => '症状の波がある（良い日と悪い日の差が大きい）',
+    'p5' => '突然倒れた・麻痺が出た経験がある（脳卒中の既往）',
+    'p6' => '歩行がおぼつかない・小刻みな歩き方になった',
+    's1' => '会話の内容がかみ合わなくなった',
+    's2' => 'TPOをわきまえない言動が増えた',
+    's3' => '趣味や人付き合いへの興味がなくなった',
+    's4' => 'お金の管理ができなくなった（計算・支払いが難しい）',
+    's5' => '薬の管理ができなくなった',
+    's6' => '電話やスマホの操作が難しくなった'
+  }
+%>
+
+    <% (0..6).map { |i| @current_anchor - i.days }.each do |date| %>
+      <% 
+        log = @daily_logs_by_date ? @daily_logs_by_date[date.to_s] : nil
+        record = @records_by_date ? @records_by_date[date.to_s] : nil
+
+        # モデルの整数値（enumのインデックス）を安全に取り出す
+        meal_val  = log.is_a?(Hash) ? log["meal"] || log[:meal] : log&.meal
+        sleep_val = log.is_a?(Hash) ? log["sleep"] || log[:sleep] : log&.sleep
+        mood_val  = log.is_a?(Hash) ? log["mood"] || log[:mood] : log&.mood
+        memo_val  = log.is_a?(Hash) ? log["memo"] || log[:memo] : log&.memo
+
+        # 定数ハッシュから整数キーで一発引き！見つからなければ 'ー'
+        meal_text  = DailyLog::MEAL_LABELS[meal_val] || 'ー'
+        sleep_text = DailyLog::SLEEP_LABELS[sleep_val] || 'ー'
+        mood_text  = DailyLog::MOOD_LABELS[mood_val] || 'ー'
+
+        type_names = { 'alz' => 'アルツハイマー型', 'vas' => '脳血管性', 'lewy' => 'レビー小体型', 'ftd' => '前頭側頭型' }
+      %>
+      <div style="background: #111b38; border: 1px solid #334155; border-radius: 10px; padding: 15px; box-shadow: 0 2px 6px rgba(0,0,0,0.2);">
+        
+        <%# カードのヘッダー %>
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; padding-bottom: 10px; margin-bottom: 10px;">
+          <span style="font-size: 15px; font-weight: bold; color: <%= date == Date.today ? '#38bdf8' : '#60a5fa' %>;">
+            <%= date.strftime("%Y年%m月%d日") %> (<%=['日','月','火','水','木','金','土'][date.wday] %>)
+            <% if date == Date.today %><span style="background: #0284c7; color: white; font-size: 10px; padding: 2px 5px; border-radius: 4px; margin-left: 5px;">今日</span><% end %>
+          </span>
+
+          <button type="button" class="open-modal-btn cognicare-btn" 
+                  data-date="<%= date.to_s %>"
+                  data-meal="<%= meal_val %>"
+                  data-sleep="<%= sleep_val %>"
+                  data-mood="<%= mood_val %>"
+                  data-memo="<%= h(memo_val) %>"
+                  style="background: #1e293b; color: #60a5fa; border: 1px solid #1d4ed8; padding: 5px 10px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 12px;">
+            <%= log.present? ? "✏️ 生活記録を編集" : "✍️ 生活記録を書く" %>
+          </button>
+        </div>
+
+        <%# 状態の表示 %>
+        <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; font-size: 13px;">
+          
+          <div style="background: #1e293b; padding: 8px 10px; border-radius: 6px; border: 1px solid #334155;">
+            <span style="color: #94a3b8; display: block; font-size: 11px;">食事</span>
+            <span style="font-weight: bold; color: #ffffff;"><%= meal_text %></span>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+            <div style="background: #1e293b; padding: 8px 10px; border-radius: 6px; border: 1px solid #334155;">
+              <span style="color: #94a3b8; display: block; font-size: 11px;">睡眠</span>
+              <span style="font-weight: bold; color: #ffffff;"><%= sleep_text %></span>
+            </div>
+            
+            <div style="background: #1e293b; padding: 8px 10px; border-radius: 6px; border: 1px solid #334155;">
+              <span style="color: #94a3b8; display: block; font-size: 11px;">ご機嫌</span>
+              <span style="font-weight: bold; color: #ffffff;"><%= mood_text %></span>
+            </div>
+          </div>
+
+        </div>
+
+        <%# 行動チェック傾向 ＆ 詳細項目エリア %>
+        <div style="background: #1e293b; padding: 10px 12px; border-radius: 6px; margin-bottom: 10px; border: 1px solid #334155;">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+            <div>
+              <span style="font-size: 11px; color: #94a3b8; display: block;">🧠 行動チェック傾向</span>
+              <% if record.present? && record.top_type.present? %>
+                <span style="font-weight: bold; color: #38bdf8; font-size: 14px;"><%= "#{type_names[record.top_type]}的傾向" %></span>
+              <% end %>
+            </div>
+            <div>
+              <% if record.present? %>
+                <%= link_to "やり直す", dementia_checker_index_path(@care_subject, recorded_on: date), style: "background: #334155; color: #60a5fa; border: 1px solid #475569; padding: 4px 8px; border-radius: 4px; text-decoration: none; font-size: 11px; font-weight: bold;" %>
+              <% else %>
+                <%= link_to "行動チェックを行う", dementia_checker_index_path(care_subject_id: @care_subject.id, recorded_on: date), style: "background: #1d4ed8; color: #ffffff; padding: 4px 8px; border-radius: 4px; text-decoration: none; font-size: 11px; font-weight: bold;" %>
+              <% end %>
+            </div>
+          </div>
+
+          <% if record.present? && record.checked_ids.present? %>
+            <div style="margin-top: 6px; padding-top: 6px; border-top: 1px dashed #334155;">
+              <div style="display: flex; flex-wrap: wrap; gap: 4px;">
+                <% record.checked_ids.each do |sym_id| %>
+                  <span style="background: #0f172a; color: #cbd5e1; border: 1px solid #475569; font-size: 11px; padding: 2px 6px; border-radius: 4px;">
+                    <%= symptom_labels[sym_id] || sym_id %>
+                  </span>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+
+        <%# メモの表示 %>
+        <div style="background: #1e293b; padding: 6px 12px; border-radius: 6px; font-size: 13px; line-height: 1.4; color: #e2e8f0; border: 1px solid #334155;">
+          <span style="font-size: 11px; color: #94a3b8; font-weight: bold; display: block; margin-bottom: 2px;">📝 日記・介護メモ</span>
+          <% if memo_val.present? %>
+            <div style="color: #ffffff; white-space: pre-wrap;"><%= memo_val.strip %></div>
+          <% else %>
+            <div style="color: #64748b; font-style: italic;">（メモなし）</div>
+          <% end %>
+        </div>
+
+      </div>
+    <% end %>
+  </div>
+
+  <%# --- 4. 編集・作成用ポップアップ（モーダル） --- %>
+  <div id="record-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; justify-content: center; align-items: center;">
+    <div style="background: #111b38; border: 2px solid #1d4ed8; border-radius: 12px; width: 95%; max-width: 500px; padding: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); color: #e2e8f0; max-height: 90vh; overflow-y: auto;">
+      
+      <%= form_with url: care_subject_daily_logs_path(@care_subject), method: :post, id: "modal-form", data: { turbo: false } do |f| %>
+        <%= f.hidden_field :logged_on, id: "modal-recorded-on" %>
+        
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #334155; padding-bottom: 8px;">
+          <h3 style="margin: 0; font-size: 16px; color: #ffffff;"><span id="modal-date-label" style="color: #60a5fa;"></span> の生活記録</h3>
+          <span id="close-modal" style="cursor: pointer; font-size: 18px; color: #94a3b8;">&times;</span>
+        </div>
+
+        <div style="margin-bottom: 12px;">
+          <label style="display: block; font-size: 12px; margin-bottom: 3px; color: #94a3b8;">🍽️ 食事</label>
+          <%= f.select :meal, DailyLog::MEAL_LABELS.map { |k, v| [v, k] }, {}, id: "modal-select-meal", class: "form-control" %>
+        </div>
+
+        <div class="cognicare-row-inputs" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px;">
+          <div>
+            <label style="display: block; font-size: 12px; margin-bottom: 3px; color: #94a3b8;">💤 睡眠</label>
+            <%= f.select :sleep, DailyLog::SLEEP_LABELS.map { |k, v| [v, k] }, {}, id: "modal-select-sleep", class: "form-control" %>
+          </div>
+
+          <div>
+            <label style="display: block; font-size: 12px; margin-bottom: 3px; color: #94a3b8;">😊 機嫌</label>
+            <%= f.select :mood, DailyLog::MOOD_LABELS.map { |k, v| [v, k] }, {}, id: "modal-select-mood", class: "form-control" %>
+          </div>
+        </div>
+        
+        <div style="margin-bottom: 12px; background: #1e293b; padding: 10px; border-radius: 6px; border: 1px solid #334155;">
+          <span style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 8px; color: #38bdf8;">💡 タップでメモに自動入力</span>
+          
+          <% [
+               [{ label: '夜間ウロウロしていた', text: '【徘徊】夜間ウロウロしていた' }, { label: 'トイレの回数が多かった', text: '【排泄】トイレの回数が多かった' }], 
+               [{ label: '水分があまり摂れていない', text: '【心配】日中の水分摂取がいつもより少ない' }, { label: 'お薬を嫌がった', text: '【服薬】お薬を嫌がった' }, { label: 'ふらつき・転倒しそう', text: '【安全】ふらつき・転倒しそう' }],
+               [{ label: '失禁があった', text: '【排泄】失禁があった' }, { label: '便秘気味', text: '【体調】便秘気味' }, { label: '下痢気味', text: '【体調】下痢気味' }],
+               [{ label: '特になし（普段と変わりない）', text: '【日常】特になし（普段と変わりない）' }]
+             ].each do |group| %>
+            <div style="display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 6px;">
+              <% group.each do |item| %>
+                <button type="button" class="quick-memo-btn" data-text="<%= item[:text] %>" style="background: #334155; border: 1px solid #475569; color: #e2e8f0; padding: 3px 8px; font-size: 11px; border-radius: 12px; cursor: pointer;"><%= item[:label] %></button>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+
+        <div style="margin-bottom: 15px;">
+          <label style="display: block; font-size: 12px; margin-bottom: 3px; color: #94a3b8;">📝 日記・介護メモ</label>
+          <%= f.text_area :memo, id: "modal-text-memo", placeholder: "普段と変わった様子があればメモ", class: "form-control", style: "width: 100%; height: 100px; resize: vertical; box-sizing: border-box;" %>
+        </div>
+
+        <div style="display: flex; gap: 8px; justify-content: flex-end;">
+          <button type="button" id="cancel-modal" style="background: #334155; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px;">キャンセル</button>
+          <%= f.submit "保存する", style: "background: #1d4ed8; color: white; border: none; padding: 8px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px;" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  document.addEventListener("turbo:load", () => {
+    const modal = document.getElementById("record-modal");
+    if (!modal) return;
+
+    const textarea = document.getElementById("modal-text-memo");
+
+    document.querySelectorAll(".quick-memo-btn").forEach(button => {
+      button.onclick = (e) => {
+        e.preventDefault();
+        const insertText = button.getAttribute("data-text");
+        const targetLine = `${insertText}\n`;
+
+        if (textarea.value.includes(targetLine)) {
+          textarea.value = textarea.value.replace(targetLine, "");
+          button.style.background = "#334155";
+        } else {
+          if (!textarea.value.endsWith("\n") && textarea.value.trim() !== "") textarea.value += "\n";
+          textarea.value += targetLine;
+          button.style.background = "#1d4ed8";
+        }
+      };
+    });
+
+    document.querySelectorAll(".open-modal-btn").forEach(btn => {
+      btn.onclick = () => {
+        const dateStr = btn.getAttribute("data-date");
+        const d = new Date(dateStr.replace(/-/g, '/'));
+        
+        document.getElementById("modal-date-label").textContent = `${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日`;
+        document.getElementById("modal-recorded-on").value = dateStr;
+
+        const meal = btn.getAttribute("data-meal");
+        const sleep = btn.getAttribute("data-sleep");
+        const mood = btn.getAttribute("data-mood");
+        const memo = btn.getAttribute("data-memo");
+
+        // 数値（enum）をそのままセレクトボックスにセット
+        document.getElementById("modal-select-meal").value = (meal !== "" && meal !== "null") ? meal : "1";
+        document.getElementById("modal-select-sleep").value = (sleep !== "" && sleep !== "null") ? sleep : "1";
+        document.getElementById("modal-select-mood").value = (mood !== "" && mood !== "null") ? mood : "2";
+        document.getElementById("modal-text-memo").value = (memo && memo !== "null") ? memo : "";
+
+        modal.style.display = "flex";
+      };
+    });
+
+    const hideModal = () => modal.style.display = "none";
+    document.getElementById("close-modal")?.addEventListener("click", hideModal);
+    document.getElementById("cancel-modal")?.addEventListener("click", hideModal);
+  });
+</script>

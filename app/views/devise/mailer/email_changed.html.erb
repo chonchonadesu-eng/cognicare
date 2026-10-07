@@ -1,0 +1,13 @@
+<p>こんにちは、
+  <% if @resource.respond_to?(:name) && @resource.name.present? %>
+    <%= @resource.name %> 様
+  <% else %>
+    会員 様
+  <% end %>
+</p>
+
+<% if @resource.try(:unconfirmed_email?) %>
+  <p>アカウントのメールアドレスを <%= @resource.unconfirmed_email %> へ変更する手続きを受け付けました。</p>
+<% else %>
+  <p>アカウントのメールアドレスが <%= @resource.email %> へ正常に変更されましたので通知いたします。</p>
+<% end %>

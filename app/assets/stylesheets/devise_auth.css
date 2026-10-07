@@ -1,0 +1,233 @@
+/*
+ *= require_tree .
+ *= require_self
+ */
+
+ /* ログインページ */
+body {
+  background: linear-gradient(160deg, #0a0e1a 0%, #0d1321 40%, #111827 100%);
+  min-height: 100vh;
+  margin: 0;
+  font-family: 'Noto Sans JP', 'Hiragino Sans', sans-serif;
+}
+
+.auth-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.auth-card {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 20px;
+  padding: 36px 32px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.auth-logo {
+  font-size: 44px;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.auth-title {
+  color: #e2e8f0;
+  font-size: 22px;
+  font-weight: 700;
+  text-align: center;
+  margin: 0 0 6px;
+}
+
+.auth-sub {
+  color: #64748b;
+  font-size: 13px;
+  text-align: center;
+  margin: 0 0 28px;
+}
+
+.auth-field {
+  margin-bottom: 18px;
+}
+
+.auth-label {
+  color: #94a3b8;
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.auth-field-note {
+  color: #64748b;
+  font-size: 11px;
+  margin: 0 0 6px;
+}
+
+.auth-input {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 10px;
+  color: #e2e8f0;
+  font-family: inherit;
+  font-size: 14px;
+  padding: 11px 14px;
+  transition: border-color 0.15s;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.auth-input:focus {
+  border-color: rgba(124,158,255,0.5);
+  outline: none;
+}
+
+.auth-input::placeholder {
+  color: #475569;
+}
+
+.auth-remember {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.auth-checkbox {
+  accent-color: #7c9eff;
+  width: 16px;
+  height: 16px;
+}
+
+.auth-remember-label {
+  color: #94a3b8;
+  font-size: 13px;
+}
+
+.auth-btn {
+  border-radius: 12px;
+  cursor: pointer;
+  display: block;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 13px;
+  text-align: center;
+  text-decoration: none;
+  transition: all 0.2s;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+}
+
+.auth-btn--primary {
+  background: linear-gradient(135deg, #7c9eff, #a78bfa);
+  border: none;
+  color: white;
+}
+
+.auth-btn--primary:hover {
+  box-shadow: 0 8px 24px rgba(124,158,255,0.35);
+  transform: translateY(-2px);
+}
+
+.auth-btn--oauth {
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.05);
+  color: #e2e8f0;
+}
+
+.auth-btn--oauth:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+.auth-divider {
+  align-items: center;
+  color: #475569;
+  display: flex;
+  font-size: 12px;
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: rgba(255,255,255,0.08);
+}
+
+.auth-links {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 16px;
+  text-align: center;
+}
+
+.auth-link {
+  color: #7c9eff;
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.auth-link:hover {
+  text-decoration: underline;
+}
+
+/* エラーメッセージ */
+#error_explanation {
+  background: rgba(248,113,113,0.08);
+  border: 1px solid rgba(248,113,113,0.25);
+  border-radius: 10px;
+  margin-bottom: 18px;
+  padding: 14px 16px;
+}
+
+#error_explanation h2 {
+  color: #f87171;
+  font-size: 13px;
+  margin: 0 0 8px;
+}
+
+#error_explanation ul {
+  color: #fca5a5;
+  font-size: 12px;
+  line-height: 1.7;
+  margin: 0;
+  padding-left: 16px;
+}
+
+/* フラッシュメッセージ */
+.flash-notice {
+  background: rgba(52,211,153,0.1);
+  border: 1px solid rgba(52,211,153,0.25);
+  border-radius: 10px;
+  color: #34d399;
+  font-size: 13px;
+  margin-bottom: 16px;
+  padding: 12px 16px;
+}
+
+.flash-alert {
+  background: rgba(248,113,113,0.1);
+  border: 1px solid rgba(248,113,113,0.25);
+  border-radius: 10px;
+  color: #f87171;
+  font-size: 13px;
+  margin-bottom: 16px;
+  padding: 12px 16px;
+}
+
+/* ボタンのホバー効果（マウスを乗せた時の変化） */
+.auth-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+  transition: all 0.2s;
+}

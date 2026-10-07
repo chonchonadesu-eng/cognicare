@@ -1,0 +1,14 @@
+<p>こんにちは、
+  <% if @resource.respond_to?(:name) && @resource.name.present? %>
+    <%= @resource.name %> 様
+  <% else %>
+    会員 様
+  <% end %>
+</p>
+
+<p>この度はご登録いただきありがとうございます。以下のリンクをクリックして、アカウントの有効化を完了してください：</p>
+
+<p><%= link_to 'アカウントを有効化する', confirmation_url(@resource, confirmation_token: @token) %></p>
+
+
+<%# サイト名を最後に入れる %>

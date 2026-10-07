@@ -1,0 +1,112 @@
+<div style="max-width: 500px; margin: 40px auto; padding: 30px; background-color: #0f172a; border: 1px solid #1e293b; border-radius: 12px; font-family: sans-serif; color: #e2e8f0;">
+
+  <h2 style="font-size: 20px; font-weight: bold; color: #ffffff; margin-bottom: 24px; border-bottom: 2px solid #1d4ed8; padding-bottom: 8px;">
+    👤 アカウント情報の編集
+  </h2>
+
+  <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+    <%= render "devise/shared/error_messages", resource: resource %>
+
+    <div style="margin-bottom: 20px;">
+      <%= f.label :name, "記録者のニックネーム", style: "display: block; font-size: 14px; font-weight: 600; color: #cbd5e1; margin-bottom: 6px;" %>
+      <%= f.text_field :name, autofocus: true, style: "width: 100%; box-sizing: border-box; background-color: #1e293b; color: #ffffff; border: 1px solid #475569; padding: 10px 12px; border-radius: 6px; font-size: 14px; outline: none;" %>
+    </div>
+
+    <div style="margin-bottom: 20px;">
+      <%= f.label :patient_name, "ケア対象者の名前", style: "display: block; font-size: 14px; font-weight: 600; color: #cbd5e1; margin-bottom: 6px;" %>
+      <%= f.text_field :patient_name, style: "width: 100%; box-sizing: border-box; background-color: #1e293b; color: #ffffff; border: 1px solid #475569; padding: 10px 12px; border-radius: 6px; font-size: 14px; outline: none;" %>
+    </div>
+
+    <div style="margin-bottom: 20px;">
+      <%= f.label :email, "メールアドレス", style: "display: block; font-size: 14px; font-weight: 600; color: #cbd5e1; margin-bottom: 6px;" %>
+      <%= f.email_field :email, autocomplete: "email", style: "width: 100%; box-sizing: border-box; background-color: #1e293b; color: #ffffff; border: 1px solid #475569; padding: 10px 12px; border-radius: 6px; font-size: 14px; outline: none;" %>
+    </div>
+
+    <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+      <div style="font-size: 13px; color: #eab308; background-color: rgba(234, 179, 8, 0.1); padding: 8px; border-radius: 4px; margin-bottom: 20px;">
+        現在確認待ちのメールアドレス: <%= resource.unconfirmed_email %>
+      </div>
+    <% end %>
+    
+    <%# --- 新しいパスワード --- %>
+    <div style="margin-bottom: 20px;">
+      <label style="display: block; font-size: 14px; font-weight: 600; color: #cbd5e1; margin-bottom: 6px;">
+        新しいパスワード <span style="font-size: 12px; font-weight: normal; color: #64748b;">(変更しない場合は空欄)</span>
+      </label>
+
+      <div data-controller="password-toggle" style="position: relative;">
+        <%= f.password_field :password, autocomplete: "new-password", 
+            id: "edit-password", 
+            data: { password_toggle_target: "input" },
+            style: "width: 100%; box-sizing: border-box; background-color: #1e293b; color: #ffffff; border: 1px solid #475569; padding: 10px 12px; border-radius: 6px; font-size: 14px; outline: none; padding-right: 40px;" %>
+        
+        <button type="button" data-action="password-toggle#toggle" data-password-toggle-target="button" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 16px;">
+          👁️
+        </button>
+      </div>
+      
+      <% if @minimum_password_length %>
+        <p style="font-size: 12px; color: #64748b; margin: 4px 0 0 0;">※ 半角英数字 <%= @minimum_password_length %> 文字以上</p>
+      <% end %>
+    </div>
+    
+    <%# --- 新しいパスワード（確認用） --- %>
+    <div style="margin-bottom: 20px;">
+      <%= f.label :password_confirmation, "新しいパスワード（確認用）", style: "display: block; font-size: 14px; font-weight: 600; color: #cbd5e1; margin-bottom: 6px;" %>
+      <div data-controller="password-toggle" style="position: relative;">
+
+        <%= f.password_field :password_confirmation, autocomplete: "new-password", 
+            id: "edit-password-confirmation", 
+            data: { password_toggle_target: "input" },
+            style: "width: 100%; box-sizing: border-box; background-color: #1e293b; color: #ffffff; border: 1px solid #475569; padding: 10px 12px; border-radius: 6px; font-size: 14px; outline: none; padding-right: 40px;" %>
+        
+        <button type="button" data-action="password-toggle#toggle" data-password-toggle-target="button" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 16px;">
+          👁️
+        </button>
+      </div>
+    </div>
+
+    <%# --- ③ 現在のパスワード --- %>
+    <div style="margin-bottom: 28px; padding: 14px; background-color: #1e293b; border-radius: 8px; border: 1px solid #2a354f;">
+      <%= f.label :current_password, "現在のパスワード", style: "display: block; font-size: 14px; font-weight: 600; color: #ffffff; margin-bottom: 4px;" %>
+      <span style="display: block; font-size: 12px; color: #94a3b8; margin-bottom: 8px;">※ 変更を保存するには現在のパスワードの入力が必要です</span>
+      
+      <div data-controller="password-toggle" style="position: relative;">
+        <%= f.password_field :current_password, autocomplete: "current-password", 
+            id: "edit-current-password", 
+            data: { password_toggle_target: "input" },
+            style: "width: 100%; box-sizing: border-box; background-color: #0f172a; color: #ffffff; border: 1px solid #475569; padding: 10px 12px; border-radius: 6px; font-size: 14px; outline: none; padding-right: 40px;" %>
+        
+        <button type="button" data-action="password-toggle#toggle" data-password-toggle-target="button" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 16px;">
+          👁️
+        </button>
+      </div>
+    </div>
+
+    <div style="margin-bottom: 24px;">
+      <%= f.submit "変更を保存する", style: "width: 100%; background-color: #1d4ed8; color: #ffffff; border: 1px solid #60a5fa; padding: 12px; border-radius: 6px; font-weight: bold; font-size: 15px; cursor: pointer; transition: background 0.2s;" %>
+    </div>
+  <% end %>
+
+  <hr style="border: 0; border-top: 1px solid #1e293b; margin: 24px 0;">
+
+  <div style="margin-top: 30px; margin-bottom: 35px;">
+  <p style="color: #666; font-size: 13px; margin-bottom: 8px;">アプリの利用を一時的に終了する場合</p>
+  <%= link_to 'ログアウトする', "/logout", class: 'btn', style: 'color: #64748b; border: 1px solid #cbd5e1; background-color: #ffffff; font-weight: bold; text-decoration: none; font-size: 13px; padding: 6px 16px; border-radius: 6px; display: inline-block; transition: background-color 0.2s;' %>
+</div>
+
+<h3 style="font-size: 15px; font-weight: bold; color: #f87171; margin-bottom: 12px;">
+  ⚠️ アカウント削除
+</h3>
+<div style="display: flex; justify-content: space-between; align-items: center; background-color: rgba(248, 113, 113, 0.05); padding: 12px 16px; border-radius: 8px; border: 1px solid rgba(248, 113, 113, 0.2);">
+  <span style="font-size: 13px; color: #94a3b8;">すべてのデータを完全に消去しますか？</span>
+  <%= button_to "削除", registration_path(resource_name), data: { confirm: "本当に削除しますか？記録はすべて削除されます。", turbo_confirm: "本当に削除しますか？記録はすべて削除されます。" }, method: :delete, style: "background: none; border: none; color: #f87171; font-size: 13px; font-weight: bold; cursor: pointer; text-decoration: underline;" %>
+</div>
+
+  
+
+  <div style="margin-top: 24px; text-align: center;">
+    <%= link_to "カレンダーに戻る", :back, style: "color: #94a3b8; font-size: 14px; text-decoration: none; font-weight: 500;" %>
+  </div>
+
+</div>

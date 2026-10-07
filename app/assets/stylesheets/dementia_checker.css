@@ -1,0 +1,306 @@
+/*
+ *= require_tree .
+ *= require_self
+ */
+
+#dementia-checker {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 32px 20px 20px;
+  font-family: 'Noto Sans JP', 'Hiragino Sans', sans-serif;
+  color: #e2e8f0;
+  background: linear-gradient(160deg, #0a0e1a 0%, #0d1321 40%, #111827 100%);
+}
+
+.dc-hidden { display: none !important; }
+
+.dc-hero { text-align: center; margin-bottom: 36px; }
+.dc-hero__icon { font-size: 60px; margin-bottom: 16px; }
+.dc-hero__title {
+  font-size: clamp(24px, 5vw, 36px);
+  font-weight: 700;
+  line-height: 1.35;
+  margin-bottom: 14px;
+  color: #e2e8f0;
+}
+.dc-hero__accent { color: #7C9EFF; font-style: italic; }
+.dc-hero__desc { color: #94a3b8; font-size: 14px; line-height: 1.85; max-width: 500px; margin: 0 auto; }
+
+.dc-features {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.dc-feature-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 16px;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.dc-disclaimer {
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-size: 13px;
+  line-height: 1.7;
+  margin-bottom: 24px;
+}
+.dc-disclaimer--warning {
+  background: rgba(251,191,36,0.06);
+  border: 1px solid rgba(251,191,36,0.2);
+  color: #fbbf24;
+  text-align: center; /* ← ここを追加します */
+}
+
+.dc-btn {
+  border-radius: 12px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 13px 28px;
+  transition: all 0.2s;
+}
+.dc-btn--primary {
+  background: linear-gradient(135deg, #7C9EFF, #A78BFA);
+  border: none;
+  color: white;
+}
+.dc-btn--primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(124,158,255,0.35); }
+.dc-btn--ghost {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.15);
+  color: #94a3b8;
+}
+.dc-btn--ghost:hover { border-color: rgba(255,255,255,0.3); color: #e2e8f0; }
+
+.dc-center { text-align: center; }
+.dc-time-note { font-size: 12px; color: #475569; margin-top: 8px; }
+
+.dc-progress-wrap { margin-bottom: 22px; }
+.dc-progress-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  margin-bottom: 8px;
+  color: #64748b;
+}
+.dc-checked-label { color: #7C9EFF; }
+.dc-progress-bar {
+  height: 3px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.dc-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #7C9EFF, #A78BFA);
+  border-radius: 2px;
+  transition: width 0.4s ease;
+}
+
+.dc-tabs {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  margin-bottom: 20px;
+}
+.dc-tab {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+  color: #64748b;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 12px;
+  padding: 6px 12px;
+  white-space: nowrap;
+  transition: all 0.15s;
+}
+.dc-tab--active {
+  background: rgba(124,158,255,0.15);
+  border-color: rgba(124,158,255,0.4);
+  color: #7C9EFF;
+}
+.dc-tab-badge {
+  background: #7C9EFF;
+  border-radius: 10px;
+  color: white;
+  font-size: 10px;
+  margin-left: 4px;
+  padding: 1px 6px;
+}
+
+.dc-cat-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.dc-cat-icon {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+.dc-cat-title { font-size: 17px; font-weight: 600; }
+.dc-cat-inst { font-size: 12px; color: #64748b; }
+.dc-selected-badge {
+  margin-left: auto;
+  background: rgba(124,158,255,0.15);
+  border: 1px solid rgba(124,158,255,0.3);
+  border-radius: 8px;
+  color: #7C9EFF;
+  font-size: 12px;
+  padding: 4px 10px;
+}
+
+.dc-symptoms { display: flex; flex-direction: column; gap: 6px; margin-bottom: 24px; }
+.dc-symptom {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 13px 16px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+  border: 1px solid transparent;
+}
+.dc-symptom:hover { background: rgba(255,255,255,0.05); }
+.dc-symptom--checked {
+  background: rgba(124,158,255,0.1);
+  border-color: rgba(124,158,255,0.3);
+}
+.dc-checkbox {
+  width: 22px; height: 22px; min-width: 22px;
+  border-radius: 6px;
+  border: 2px solid rgba(255,255,255,0.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700;
+  transition: all 0.15s;
+  color: white;
+}
+.dc-checkbox--checked {
+  background: linear-gradient(135deg, #7C9EFF, #A78BFA);
+  border-color: transparent;
+}
+.dc-symptom-text { font-size: 14px; line-height: 1.65; color: #94a3b8; }
+.dc-symptom--checked .dc-symptom-text { color: #e2e8f0; }
+
+.dc-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+/* ========== チェック結果 ========== */
+.dc-result-header { text-align: center; margin-bottom: 24px; }
+.dc-analysis-label { font-size: 11px; color: #64748b; letter-spacing: 0.12em; margin-bottom: 6px; }
+.dc-result-title { font-size: clamp(20px, 5vw, 28px); font-weight: 700; margin-bottom: 6px; }
+.dc-result-sub { font-size: 13px; color: #64748b; }
+
+/* ========== トップ結果（一致する可能性結果） ========== */
+.dc-top-result-inner {
+  border: 1px solid;
+  border-radius: 16px;
+  padding: 18px 20px;
+  margin-bottom: 16px;
+}
+.dc-top-label { font-size: 11px; letter-spacing: 0.1em; font-weight: 600; margin-bottom: 8px; }
+.dc-top-main { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+.dc-top-icon { font-size: 26px; }
+.dc-top-name { font-size: 18px; font-weight: 700; }
+.dc-top-prev { font-size: 12px; color: #64748b; }
+.dc-top-pct { font-size: 26px; font-weight: 700; margin-left: auto; }
+.dc-top-desc { font-size: 13px; color: #94a3b8; line-height: 1.75; }
+
+/* ========== ４タイプの%グラフと詳細カード ========== */
+.dc-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+.dc-section-label { font-size: 13px; font-weight: 600; color: #94a3b8; margin-bottom: 12px; }
+
+.dc-bar-row { margin-bottom: 14px; }
+.dc-bar-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  margin-bottom: 5px;
+}
+.dc-bar-track {
+  height: 6px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.dc-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 1s ease;
+}
+
+.dc-detail-card { border-radius: 16px; overflow: hidden; margin-bottom: 10px; }
+.dc-detail-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 18px;
+  border: 1px solid;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+.dc-detail-header:hover { opacity: 0.85; }
+.dc-detail-name-wrap { flex: 1; }
+.dc-detail-name { font-size: 14px; font-weight: 600; }
+.dc-detail-prev { font-size: 11px; color: #64748b; }
+.dc-chevron { color: #64748b; font-size: 12px; transition: transform 0.2s; }
+
+.dc-detail-body {
+  padding: 18px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-top: none;
+  border-radius: 0 0 16px 16px;
+}
+.dc-detail-desc { font-size: 13px; color: #94a3b8; line-height: 1.75; margin-bottom: 16px; }
+.dc-care-label { font-size: 13px; font-weight: 600; margin-bottom: 8px; }
+
+.dc-advice-item {
+  padding: 11px 14px;
+  border-radius: 10px;
+  margin-bottom: 8px;
+  border-left: 3px solid;
+  background: rgba(255,255,255,0.03);
+}
+.dc-advice-title { font-size: 13px; font-weight: 600; margin-bottom: 3px; }
+.dc-advice-detail { font-size: 12px; color: #94a3b8; line-height: 1.65; }
+
+.dc-concern-box {
+  padding: 13px;
+  background: rgba(124,158,255,0.06);
+  border-radius: 10px;
+  margin-bottom: 8px;
+  font-size: 12px;
+  color: #94a3b8;
+  line-height: 1.7;
+}
+.dc-concern-label { color: #7C9EFF; font-weight: 600; margin-bottom: 5px; font-size: 12px; }
+.dc-family-box {
+  padding: 13px;
+  background: rgba(167,139,250,0.06);
+  border-radius: 10px;
+  font-size: 12px;
+  color: #94a3b8;
+  line-height: 1.7;
+}
+.dc-family-label { color: #A78BFA; font-weight: 600; margin-bottom: 5px; font-size: 12px; }

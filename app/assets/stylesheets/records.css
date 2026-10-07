@@ -1,0 +1,80 @@
+/*
+ *= require_tree .
+ *= require_self
+ */
+
+ /* チェックレコードページ */
+/* 全体の背景設定 */
+body, #records-page {
+  background-color: #0a0e1a !important;
+  color: #e2e8f0;
+  min-height: 100vh;
+  margin: 0;
+}
+
+/* カード部分（背景を少し浮かせて立体感を出す） */
+.rec-card {
+  background: #161b2a;
+  border: 1px solid #2d3748;
+  border-radius: 16px;
+  margin-bottom: 24px;
+  padding: 24px;
+}
+
+/* タイトルとサブテキスト */
+.rec-title {
+  color: #ffffff;
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+
+.rec-sub {
+  color: #94a3b8;
+}
+
+/* カレンダーやグラフ内の文字色を強制的に白系にする */
+.rec-card__title, .rec-empty, .rec-history-date {
+  color: #ffffff !important;
+}
+
+/* スタンプの文字色 */
+.rec-stamp-legend span {
+  color: #cbd5e1;
+  font-size: 0.85rem;
+}
+
+/* 履歴アイテムの区切り線 */
+.rec-history-item {
+  border-bottom: 1px solid #2d3748;
+  padding: 16px 0;
+}
+
+/* ボタン */
+.rec-btn--primary {
+  background-color: #3b82f6; 
+  color: white !important;
+  border-radius: 8px;
+  padding: 10px 20px;
+  text-decoration: none;
+  display: inline-block;
+  transition: background 0.3s;
+}
+
+.rec-btn--primary:hover {
+  background-color: #2563eb;
+}
+
+/* --- 生活記録の入力項目を横並びにするスタイル --- */
+.cognicare-row-inputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr; 
+  gap: 8px;
+}
+
+/* スマホなどの画面で窮屈にならないための調整 */
+@media (max-width: 480px) {
+  .cognicare-inline-inputs {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+}

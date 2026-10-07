@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%= stylesheet_link_tag "dementia_checker" %>
+    <%= stylesheet_link_tag "devise_auth" %>
+  
+    <title>Cognicare</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body>
+    <% if notice %>
+      <div class="flash-notice" style="max-width:400px;margin:16px auto 0;"><%= notice %></div>
+    <% end %>
+    <% if alert %>
+      <div class="flash-alert" style="max-width:400px;margin:16px auto 0;"><%= alert %></div>
+    <% end %>
+
+    <%= yield %>
+    
+    <footer style="margin-top: 50px; padding: 20px; border-top: 1px solid #444; color: #888; font-size: 0.8rem; text-align: center;">
+      <p>© Cognicare</p>
+      <p style="margin-top: 10px; line-height: 1.6;">
+        【免責事項】<br>
+        本サイトで提供される診断機能および情報は、医療行為を目的としたものではなく、医師の診断に代わるものではありません。<br>
+        身体や精神の症状については、必ず専門の医療機関にご相談ください。
+      </p>
+    </footer>
+  </body>
+</html>

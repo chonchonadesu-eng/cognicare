@@ -1,0 +1,72 @@
+# Additional translations at https://github.com/heartcombo/devise/wiki/I18n
+
+ja:
+  devise:
+    failure:
+      already_authenticated: "すでにログインしています。"
+      unauthenticated: "ログインまたは登録が必要です。"
+      invalid: "メールアドレスまたはパスワードが間違っているか、登録されていません。"
+      not_found_in_database: "メールアドレスまたはパスワードが間違っているか、登録されていません。"
+      unconfirmed: "メールアドレスの確認が必要です。届いたメールのリンクをクリックしてアカウントを有効化してください。"
+      user:
+        not_found_in_database: "メールアドレスまたはパスワードが間違っているか、登録されていません。"
+    
+    registrations:
+      user:
+        updated: "アカウント情報を変更しました。"
+        updated_but_not_signed_in: "アカウント情報を変更しました。"
+        destroyed: "アカウントを削除しました。またのご利用をお待ちしております。"
+        signed_up: "アカウント登録が完了しました。"
+
+      updated: "アカウント情報を変更しました。"
+      updated_but_not_signed_in: "アカウント情報を変更しました。"
+      destroyed: "アカウントを削除しました。またのご利用をお待ちしております。"
+      signed_up: "アカウント登録が完了しました。"
+
+    confirmations:
+      confirmed: "アカウントが正常に確認されました。ログインしています。"
+      send_instructions: "数分以内に、メールアドレス確認用の手順をメールで送信します。"
+      send_flash: "数分以内に、メールアドレス確認用の手順をメールで送信します。"
+
+    passwords:
+      updated: "パスワードが正しく変更されました。"
+      send_instructions: "数分以内に、パスワードの再設定に関する手順をメールで送信します。"
+      send_flash: "数分以内に、パスワードの再設定に関する手順をメールで送信します。"
+
+    sessions:
+      signed_in: "ログインしました。"
+      signed_out: "ログアウトしました。"
+      new:
+        sign_in: "ログイン"
+        email: "メールアドレス"
+        password: "パスワード"
+        remember_me: "ログイン状態を保持する"
+        
+    shared:
+      links:
+        sign_up: "新規登録"
+        forgot_your_password: "パスワードを忘れましたか？"
+
+  time:
+    formats:
+      default: "%Y/%m/%d %H:%M"
+      short: "%m/%d %H:%M"
+      long: "%Y年%m月%d日 %H時%M分"
+
+  date:
+    formats:
+      default: "%Y/%m/%d"
+      short: "%m/%d"
+      long: "%Y年%m月%d日"
+  
+  errors:
+    messages:
+      not_saved: "%{count}件のエラーが発生したため保存されませんでした。"
+      blank: "を入力してください"
+      too_short: "は%{count}文字以上で入力してください"
+      confirmation: "が内容と一致しません"
+    models:
+      user:
+        attributes:
+          reset_password_token:
+            blank: "を入力してください（またはURLが無効です）"
