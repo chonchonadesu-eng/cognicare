@@ -1,5 +1,3 @@
-<<<<<<< Updated upstream
-=======
 ##　1. サービス概要
 
 - 画面遷移図：https://www.figma.com/design/Fjw30I0T5m8MOgfLntm3WW/%E7%84%A1%E9%A1%8C?node-id=0-1&t=KCFD2XRJWELGlDte-1
@@ -142,4 +140,3 @@
 
 - 今回チャレンジしたい点：初めてのWebアプリケーションの個人開発を最初から最後まで1人で完遂させること。
 - 不安な点：どうすればこのアプリの存在をスムーズに届けられるか。
->>>>>>> Stashed changes
